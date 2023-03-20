@@ -6,7 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 // import { FeishuController } from './feishu/feishu.controller';
-import { FeishuModule } from './user/feishu/feishu.module';
+// import { FeishuModule } from './user/feishu/feishu.module';
 
 @Module({
   imports: [
@@ -18,7 +18,6 @@ import { FeishuModule } from './user/feishu/feishu.module';
       isGlobal: true,
       load: [getConfig],
     }),
-    FeishuModule,
     UserModule,
   ],
   controllers: [AppController],

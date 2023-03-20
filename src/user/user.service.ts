@@ -1,10 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { BusinessException } from 'src/common/exceptions/business.exception.filter';
+import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.mongo.entity';
 
 @Injectable()
 export class UserService {
+  constructor(
+    @Inject('USER_REPOSITORY')
+    private userRepository: MongoRepository<User>,
+  ) {}
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -24,5 +30,9 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  createOrSave(user) {
+    this.userRepository.save(user);
   }
 }

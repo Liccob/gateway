@@ -20,9 +20,9 @@ export class UserController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Post()
+  @Post('/add')
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.createOrSave(createUserDto);
   }
 
   @Get()
