@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   VERSION_NEUTRAL,
+  Logger,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ConfigService } from '@nestjs/config';

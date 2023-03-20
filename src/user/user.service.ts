@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { BusinessException } from 'src/common/exceptions/business.exception.filter';
 import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -32,7 +32,9 @@ export class UserService {
     return `This action removes a #${id} user`;
   }
 
-  createOrSave(user) {
-    this.userRepository.save(user);
+  async createOrSave(user) {
+    Logger.log(this.userRepository);
+    const res = await this.userRepository.save(user);
+    Logger.log(res);
   }
 }
