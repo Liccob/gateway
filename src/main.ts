@@ -16,6 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    { logger: ['log', 'warn', 'verbose'] },
   );
 
   app.enableVersioning({

@@ -33,8 +33,10 @@ export class UserService {
   }
 
   async createOrSave(user) {
-    Logger.log(this.userRepository);
-    const res = await this.userRepository.save(user);
-    Logger.log(res);
+    try {
+      const res = await this.userRepository.save(user);
+    } catch (error) {
+      Logger.log(JSON.stringify(error));
+    }
   }
 }
