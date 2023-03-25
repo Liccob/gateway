@@ -11,14 +11,30 @@ import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { generateDocument } from './docs';
 import { ValidationPipe } from '@nestjs/common';
-
+import { Logger } from 'nestjs-pino';
+import { WinstonModule } from 'nest-winston';
+import DailyRotateFile = require('winston-daily-rotate-file');
+export const winstonConfig = {
+  level: 'info',
+  defaultMeta: { service: 'user-service' },
+  transports: [
+    new DailyRotateFile({
+      filename: 'application-%DATE%.log',
+      datePattern: 'YYYY-MM-DD-HH',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '14d',
+    }),
+  ],
+};
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-    { logger: ['log', 'warn', 'verbose'] },
   );
-
+  // const logger = WinstonModule.createLogger(winstonConfig);
+  // app.useLogger(logger);
+  app.useLogger(app.get(Logger));
   app.enableVersioning({
     defaultVersion: [VERSION_NEUTRAL, '1'],
     type: VersioningType.URI,
