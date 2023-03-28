@@ -36,3 +36,6 @@ coverage
 
 # config
 .config
+
+
+*-audit.json

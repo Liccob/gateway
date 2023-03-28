@@ -1,8 +1,9 @@
 import { join } from 'path';
 import { FileStream } from './fileStream';
 import { LogStream } from './logStream';
-const multiStream = require('pino-multi-stream').multistream;
-
+// const multiStream = require('pino-multi-stream').multistream;
+const pino = require('pino');
+const multiStream = pino.multistream;
 // import * as multiStream from 'pino-multi-stream';
 /**
  * @description : 接受request输出自定义信息

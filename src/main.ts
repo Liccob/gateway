@@ -14,6 +14,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { WinstonModule } from 'nest-winston';
 import DailyRotateFile = require('winston-daily-rotate-file');
+import fastify from 'fastify';
+import { FastifyLogger } from './common/logger';
 export const winstonConfig = {
   level: 'info',
   defaultMeta: { service: 'user-service' },
@@ -28,13 +30,16 @@ export const winstonConfig = {
   ],
 };
 async function bootstrap() {
+  const fastifyInstance = fastify({
+    logger: FastifyLogger,
+  });
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter(fastifyInstance),
   );
   // const logger = WinstonModule.createLogger(winstonConfig);
   // app.useLogger(logger);
-  app.useLogger(app.get(Logger));
+  // app.useLogger(app.get(Logger));
   app.enableVersioning({
     defaultVersion: [VERSION_NEUTRAL, '1'],
     type: VersioningType.URI,
