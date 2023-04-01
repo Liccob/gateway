@@ -1,3 +1,4 @@
+import { UserTokenInfoRes } from '@/src/user/feishu/feishu.dto';
 import { APP_ID, APP_SECRET } from './const';
 import { methodV } from '@/utils/request';
 
@@ -8,12 +9,16 @@ export type GetAppTokenRes = {
   expire: number;
 };
 
-export const getUserToken = async ({ code, app_token }) => {
+export const getUserToken = async ({
+  code,
+  app_token,
+}): Promise<UserTokenInfoRes> => {
   const { data } = await methodV({
     url: `/authen/v1/access_token`,
     method: 'POST',
     headers: {
       Authorization: `Bearer ${app_token}`,
+      ['Content-Type']: 'application/json; charset=utf-8',
     },
     params: {
       grant_type: 'authorization_code',
@@ -23,7 +28,10 @@ export const getUserToken = async ({ code, app_token }) => {
   return data;
 };
 
-export const refreshUserToken = async ({ refreshToken, app_token }) => {
+export const refreshUserToken = async ({
+  refreshToken,
+  app_token,
+}): Promise<UserTokenInfoRes> => {
   const { data } = await methodV({
     url: `/authen/v1/refresh_access_token`,
     method: 'POST',

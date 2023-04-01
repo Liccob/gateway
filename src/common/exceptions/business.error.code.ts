@@ -9,4 +9,6 @@ export const BUSINESS_ERROR_CODE = {
   PERMISSION_DISABLED: 10003,
   // 用户已冻结
   USER_DISABLED: 10004,
+  // 更新用户Token失败
+  REFRESH_FAIL: 10005,
 };

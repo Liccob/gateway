@@ -4,6 +4,7 @@ import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.mongo.entity';
+import { FeishuUserInfo } from './feishu/feishu.dto';
 
 @Injectable()
 export class UserService {
@@ -34,7 +35,15 @@ export class UserService {
 
   async createOrSave(user) {
     try {
-      const res = await this.userRepository.save(user);
+      return await this.userRepository.save(user);
+    } catch (error) {
+      Logger.log(JSON.stringify(error));
+    }
+  }
+
+  async createOrSaveFeishu(user: FeishuUserInfo) {
+    try {
+      return await this.userRepository.save(user);
     } catch (error) {
       Logger.log(JSON.stringify(error));
     }
