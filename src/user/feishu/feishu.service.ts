@@ -49,7 +49,7 @@ export class FeishuService {
   }
 
   async getUserToken(code: string) {
-    const appToken = await this.cacheManager.get(this.APP_TOKEN_CACHE_KEY);
+    const appToken = await this.getAppToken();
     Logger.log('app_token:' + appToken);
     const res = await getUserToken({
       code,

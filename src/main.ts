@@ -15,6 +15,7 @@ import { Logger } from 'nestjs-pino';
 import { WinstonModule } from 'nest-winston';
 import DailyRotateFile = require('winston-daily-rotate-file');
 import fastify from 'fastify';
+import fastifyCookie = require('@fastify/cookie');
 import { FastifyLogger } from './common/logger';
 export const winstonConfig = {
   level: 'info',
@@ -43,6 +44,10 @@ async function bootstrap() {
   app.enableVersioning({
     defaultVersion: [VERSION_NEUTRAL, '1'],
     type: VersioningType.URI,
+  });
+
+  await app.register(fastifyCookie, {
+    secret: 'gateway-secret', // for cookies signature
   });
 
   app.useGlobalInterceptors(new TransformInterceptor());

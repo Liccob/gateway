@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@/src/user/entities/user.mongo.entity';
 import { UserService } from 'src/user/user.service';
@@ -17,7 +17,7 @@ export class AuthService {
 
     // 将飞书的用户信息同步到数据库
     const user: User = await this.UserService.createOrSaveFeishu(feishu_info);
-
+    Logger.log('Validate FeishuUser', JSON.stringify(user));
     return {
       userId: user.id,
       username: user.username,

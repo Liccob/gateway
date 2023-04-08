@@ -9,6 +9,7 @@ import * as redisStore from 'cache-manager-redis-store';
 // import { FeishuController } from './feishu/feishu.controller';
 // import { FeishuModule } from './user/feishu/feishu.module';
 import { LoggerModule } from 'nestjs-pino';
+import { AuthModule } from './auth/auth.module';
 // import { WinstonModule } from 'nest-winston';
 
 const redisConfig = getConfig().REDIS_CONFIG;
@@ -38,6 +39,7 @@ const cacheOptions = {
       load: [getConfig],
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
