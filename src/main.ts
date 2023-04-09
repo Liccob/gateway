@@ -11,29 +11,14 @@ import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { generateDocument } from './docs';
 import { ValidationPipe } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
-import { WinstonModule } from 'nest-winston';
-import DailyRotateFile = require('winston-daily-rotate-file');
-import fastify from 'fastify';
 import fastifyCookie = require('@fastify/cookie');
 import { FastifyLogger } from './common/logger';
-export const winstonConfig = {
-  level: 'info',
-  defaultMeta: { service: 'user-service' },
-  transports: [
-    new DailyRotateFile({
-      filename: 'application-%DATE%.log',
-      datePattern: 'YYYY-MM-DD-HH',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
-    }),
-  ],
-};
+import fastify from 'fastify';
 async function bootstrap() {
   const fastifyInstance = fastify({
     logger: FastifyLogger,
   });
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(fastifyInstance),
@@ -49,7 +34,6 @@ async function bootstrap() {
   await app.register(fastifyCookie, {
     secret: 'gateway-secret', // for cookies signature
   });
-
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
 

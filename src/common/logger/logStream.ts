@@ -58,7 +58,6 @@ export class LogStream {
     const Level = levels[data.level];
     const DateTime = dayjs(data.time).format('YYYY-MM-DD HH:mm:ss.SSS A');
     const logId = data.reqId || '_logId_';
-
     let reqInfo = '[-]';
 
     if (data.req) {

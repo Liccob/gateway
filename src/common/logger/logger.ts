@@ -23,6 +23,7 @@ function asReqValue(req) {
 
   return {
     id: req.id,
+    headers: req.headers,
     method: req.method,
     url: req.url,
     remoteAddress: req.connection ? req.connection.remoteAddress : '',
@@ -54,8 +55,11 @@ export const fastLogger = (opt) => {
       req: asReqValue,
     },
     formatOpts: {
-      lowres: true,
+      lowres: false,
     },
+    // transport: {
+    //   target: 'pino-pretty',
+    // },
     ...opt,
   };
 

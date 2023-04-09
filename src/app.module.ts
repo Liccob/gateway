@@ -8,9 +8,10 @@ import { UserModule } from './user/user.module';
 import * as redisStore from 'cache-manager-redis-store';
 // import { FeishuController } from './feishu/feishu.controller';
 // import { FeishuModule } from './user/feishu/feishu.module';
-import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 // import { WinstonModule } from 'nest-winston';
+import { LoggerModule } from 'nestjs-pino';
+import { FastifyLogger } from './common/logger';
 
 const redisConfig = getConfig().REDIS_CONFIG;
 console.log(redisConfig);
@@ -24,14 +25,9 @@ const cacheOptions = {
 };
 @Module({
   imports: [
-    LoggerModule.forRoot({
-      exclude: [
-        {
-          path: '/api/doc',
-          method: 0,
-        },
-      ],
-    }),
+    // LoggerModule.forRoot({
+    //   pinoHttp: FastifyLogger,
+    // }),
     CacheModule.register(cacheOptions),
     ConfigModule.forRoot({
       ignoreEnvFile: true,
