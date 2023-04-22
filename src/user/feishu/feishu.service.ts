@@ -8,6 +8,8 @@ import { Cache } from 'cache-manager';
 import { UserTokenInfo } from './feishu.dto';
 import { BUSINESS_ERROR_CODE } from '@/src/common/exceptions/business.error.code';
 
+const USER_REFRESH_TOKEN_CACHE_KEY = 'USER_REFRESH_TOKEN_CACHE_KEY';
+const USER_TOKEN_CACHE_KEY = 'USER_TOKEN_CACHE_KEY';
 @Injectable()
 export class FeishuService {
   private APP_TOKEN_CACHE_KEY;
@@ -18,9 +20,9 @@ export class FeishuService {
     private configService: ConfigService,
   ) {
     this.APP_TOKEN_CACHE_KEY = this.configService.get('APP_TOKEN_CACHE_KEY');
-    this.USER_TOKEN_CACHE_KEY = this.configService.get('USER_TOKEN_CACHE_KEY');
+    this.USER_TOKEN_CACHE_KEY = this.configService.get(USER_TOKEN_CACHE_KEY);
     this.USER_REFRESH_TOKEN_CACHE_KEY = this.configService.get(
-      'USER_REFRESH_TOKEN_CACHE_KEY',
+      USER_REFRESH_TOKEN_CACHE_KEY,
     );
   }
   async getAppToken() {
@@ -72,15 +74,27 @@ export class FeishuService {
       expires_in,
       refresh_expires_in,
     } = options || {};
+    const all_user_cache_key: any = await this.cacheManager.get(
+      USER_TOKEN_CACHE_KEY,
+    );
     await this.cacheManager.set(
-      `${this.USER_TOKEN_CACHE_KEY}_${user_id}`,
-      access_token,
+      USER_TOKEN_CACHE_KEY,
+      {
+        ...all_user_cache_key,
+        [user_id]: access_token,
+      },
       expires_in - 60,
+    );
+    const all_user_refresh_key: any = await this.cacheManager.get(
+      USER_REFRESH_TOKEN_CACHE_KEY,
     );
 
     await this.cacheManager.set(
-      `${this.USER_REFRESH_TOKEN_CACHE_KEY}_${user_id}`,
-      refresh_token,
+      USER_REFRESH_TOKEN_CACHE_KEY,
+      {
+        ...all_user_refresh_key,
+        [user_id]: refresh_token,
+      },
       refresh_expires_in - 60,
     );
   }
@@ -93,8 +107,8 @@ export class FeishuService {
     // 如果 token 失效
     if (!userToken) {
       const refreshToken: string = await this.cacheManager.get(
-        `${this.USER_REFRESH_TOKEN_CACHE_KEY}_${userId}`,
-      );
+        USER_REFRESH_TOKEN_CACHE_KEY,
+      )?.[userId];
       if (!refreshToken) {
         throw new BusinessException({
           code: BUSINESS_ERROR_CODE.TOKEN_INVALID,

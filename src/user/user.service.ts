@@ -43,6 +43,7 @@ export class UserService {
 
   async createOrSaveFeishu(user: FeishuUserInfo) {
     try {
+      Logger.log('插入userRepository', user);
       return await this.userRepository.save(user);
     } catch (error) {
       Logger.log(JSON.stringify(error));
